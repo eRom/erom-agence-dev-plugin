@@ -75,6 +75,23 @@ render() {
   created=$((created + 1))
 }
 
+# Les binaires ne passent jamais par render() : la substitution via $(...) mange
+# les octets NUL et corrompt le fichier. Verifie le 28/08/2026, un placeholder
+# PNG de 21993 octets ressorti a 18237, `file` le voyant comme `data` et sips
+# ne lisant plus ses dimensions.
+copy() {
+  local src="$1" dest="$2"
+  if [[ -e "$dest" ]]; then
+    echo "  = ${dest#$TARGET/} (existe, laisse tel quel)"
+    skipped=$((skipped + 1))
+    return
+  fi
+  mkdir -p "$(dirname "$dest")"
+  cp "$src" "$dest"
+  echo "  + ${dest#$TARGET/}"
+  created=$((created + 1))
+}
+
 make_dir() {
   local d="$1"
   if [[ -d "$TARGET/$d" ]]; then
@@ -91,16 +108,17 @@ make_dir() {
 echo "Scaffold $PLUGIN_NAME dans $TARGET (repo eRom/$REPO_SLUG)"
 echo
 
-render "$REFS/gitignore"           "$TARGET/.gitignore"
-render "$REFS/CLAUDE.md"           "$TARGET/CLAUDE.md"
-render "$REFS/settings.local.json" "$TARGET/.claude/settings.local.json"
-render "$REFS/plugin.json"         "$TARGET/plugin/.claude-plugin/plugin.json"
-render "$REFS/README.md"           "$TARGET/plugin/README.md"
-render "$REFS/LICENSE"             "$TARGET/plugin/LICENSE"
-
 make_dir "assets"
 make_dir "docs"
 make_dir "plugin/skills"
+
+render "$REFS/gitignore"           "$TARGET/.gitignore"
+render "$REFS/CLAUDE.md"           "$TARGET/CLAUDE.md"
+render "$REFS/README_GITHUB.md"    "$TARGET/README.md"
+render "$REFS/plugin.json"         "$TARGET/plugin/.claude-plugin/plugin.json"
+render "$REFS/README_PLUGIN.md"    "$TARGET/plugin/README.md"
+render "$REFS/LICENSE"             "$TARGET/plugin/LICENSE"
+copy   "$REFS/plugin.png"          "$TARGET/assets/plugin.png"
 
 echo
 echo "$created cree(s), $skipped laisse(s) en place."

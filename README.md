@@ -26,9 +26,10 @@ seules, il faut les appeler.
 
 ### scaffold
 
-Part d'un dossier déjà créé et onboardé, et y écrit six fichiers et trois
-dossiers : `.gitignore`, le contrat de dépôt, les réglages locaux, le manifeste,
-le README, la licence, puis `assets/`, `docs/` et `plugin/skills/`.
+Part d'un dossier déjà créé et onboardé, et y écrit sept fichiers et trois
+dossiers : `.gitignore`, le contrat de dépôt, les deux README, le manifeste, la
+licence et un placeholder d'illustration, puis `assets/`, `docs/` et
+`plugin/skills/`.
 
 Le nom du plugin n'est pas le nom du dépôt : le dépôt garde le préfixe
 `erom-agence-`, le plugin s'appelle `erom-<nom>`. La skill le déduit, l'annonce,

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://www.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "{{PLUGIN_NAME}}",
+  "description": "{{DESCRIPTION}}",
+  "version": "0.1.0",
+  "author": {
+    "name": "Romain Ecarnot",
+    "url": "https://github.com/eRom"
+  },
+  "repository": "https://github.com/eRom/{{REPO_SLUG}}",
+  "license": "MIT",
+  "keywords": [],
+  "skills": "./skills/"
+}

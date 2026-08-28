@@ -101,7 +101,7 @@ prompt plutôt que le prompt recopié, et ces paramètres :
 | `quality` | `high` |
 | `output_format` | `png` |
 | `output_dir` | `<dépôt>/assets`, en absolu |
-| `filename` | le nom du plugin |
+| `filename` | `plugin.png`, overwite ok |
 
 Consigne à mettre mot pour mot dans le prompt du sous-agent :
 

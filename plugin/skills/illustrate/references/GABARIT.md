@@ -153,7 +153,7 @@ livré.
 |---|---|---|---|
 | `erom-devil` 0.9 | écorché | machine d'épreuve, cinq bras robotisés sur une pièce, cadran de verdict | 08/2026 |
 | `erom-dev-plugin` 0.1 | écorché | presse à imprimer à manivelle | 28/08/2026 |
-| `erom-dev-plugin` 0.1.3 | séquence | une caisse en bois à trois stades, ossature, fermée, cerclée vers l'étagère | 29/08/2026 |
+| `erom-dev-plugin` 0.1.4 | séquence | une caisse en bois à trois stades, ossature, fermée, cerclée vers l'étagère | 29/08/2026 |
 | `erom-memory` | séquence | six stations en enfilade, une pièce qui avance | 25/08/2026 |
 | `trinity` | écorché | bloc moteur, capot ouvert, six tubulures en éventail | 25/08/2026 |
 | `harnais-erom` | coupe | bâtiment à trois niveaux | 25/08/2026 |

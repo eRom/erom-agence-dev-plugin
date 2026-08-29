@@ -42,8 +42,9 @@ Produit une planche au fusain en 1536x1024, format paysage, destinée au README 
 dépôt. Le style est figé et validé ; c'est le contenu qui se travaille.
 
 Tout ce qui s'affiche sur la carte vient de l'inventaire réel du plugin, lu par
-`claude plugin details` : les skills étiquetées sur le dessin, les chiffres du bas,
-le tableau de la stack. Un composant qui n'est pas chargé ne va pas sur la carte.
+`claude plugin details` : chaque skill, agent, hook et serveur MCP y figure sous son
+vrai nom. Un composant qui n'est pas chargé ne va pas sur la carte. La composition,
+elle, n'est pas imposée : elle se dérive de ce que le plugin résout.
 
 La carte en tête du dépôt GitHub a été produite par cette skill, sur ce plugin.
 

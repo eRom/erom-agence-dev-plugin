@@ -1,6 +1,6 @@
 ---
 name: illustrate
-description: "Dessine la carte de présentation d'un plugin Claude Code eRom : une planche au fusain en 1536x1024, générée par GPT Image, dont tout le contenu vient de l'inventaire réel du plugin (skills, agents, hooks, serveurs MCP). Sort dans assets/, destinée au README GitHub. Commande explicite, lancée au slash : /erom-dev-plugin:illustrate."
+description: "Dessine la carte de présentation d'un plugin Claude Code eRom : une planche au fusain en 1536x1024, générée par GPT Image, dont tout le contenu vient de l'inventaire réel du plugin (skills, agents, hooks, serveurs MCP) et dont la composition se dérive de ce que le plugin résout. Sort dans assets/, destinée au README GitHub. Commande explicite, lancée au slash : /erom-dev-plugin:illustrate."
 user-invocable: true
 disable-model-invocation: true
 ---
@@ -8,8 +8,10 @@ disable-model-invocation: true
 # illustrate
 
 Une carte de plugin au fusain, format paysage, pour le README GitHub du dépôt.
-Le style est figé et validé, il ne se rediscute pas : c'est le contenu qui se
-travaille, et il vient entièrement de ce que le plugin charge vraiment.
+Le style est figé et validé, il ne se rediscute pas. Le contenu vient entièrement
+de ce que le plugin charge vraiment. La composition, elle, est libre : elle se
+dérive de ce que le plugin résout, jamais d'un gabarit de mise en page. Deux
+plugins différents donnent deux planches différentes.
 
 Cible : le plugin du dépôt courant, ou celui nommé en argument.
 
@@ -37,18 +39,26 @@ jq -r '.description, .version' "$MANIFEST"
 ```
 
 C'est la seule source de la carte. Un composant absent de cette sortie n'est pas
-chargé : il ne va pas sur la planche, même s'il existe sur le disque. Cette sortie
-donne aussi le coût token projeté, qui fournit un des trois chiffres.
+chargé : il ne va pas sur la planche, même s'il existe sur le disque. Tous ceux qui
+y sont vont sur la planche, sous leur vrai nom. Le coût token, lui, n'y va pas.
 
-Puis lire les `SKILL.md` des skills listées pour savoir ce que chacune fait faire.
-Sans ça, les trois blocs de gauche sortent génériques, et une carte générique ne
-vaut pas son prix.
+Puis lire les `SKILL.md` des skills listées et les fichiers des agents, pour savoir
+ce que chacun fait faire. Sans ça, la note de composition sort générique, et une
+carte générique ne vaut pas son prix.
 
-## 2. Écrire le prompt
+## 2. Dire ce que le plugin résout
 
-Lire `GABARIT` en entier avant d'écrire une ligne : il porte le gabarit exact à
-recopier, la façon de choisir l'écorché, et onze règles dures qui sont chacune une
-image ratée qu'on ne repaiera pas.
+Avant d'écrire le prompt, écrire dans la réponse une note de composition en quatre
+lignes : **Résout**, **Geste**, **Registre et objet**, **À ne pas répéter**. Le
+gabarit dit comment les remplir et liste les cartes déjà livrées. C'est cette note
+qui décide de la planche : un prompt écrit sans elle retombe sur la machine posée
+sur un établi, comme les deux premières cartes.
+
+## 3. Écrire le prompt
+
+Lire `GABARIT` en entier avant d'écrire une ligne : il porte les trois blocs figés
+à recopier tels quels, la façon d'écrire la scène entre les deux, et treize règles
+dures qui sont chacune une image ratée qu'on ne repaiera pas.
 
 Écrire le prompt rempli dans un fichier, puis compter :
 
@@ -56,13 +66,13 @@ image ratée qu'on ne repaiera pas.
 wc -m < /tmp/prompt-carte.txt     # doit rester sous 5000
 ```
 
-Trois pièges qui coûtent une image entière, détaillés dans le gabarit :
+Quatre pièges qui coûtent une image entière, détaillés dans le gabarit :
 
 - **Tous les accents en place.** Le modèle recopie, il ne corrige pas.
-- **Aucun gros chiffre dénombrable dans le dessin.** Un « 3 » à côté de trois
-  modules dessinés se rate une fois sur deux.
-- **Un seul objet.** Nommer l'objet unique dans les CONTRAINTES, sinon la planche
-  se peuple toute seule.
+- **Aucun nombre à côté de ce qui se compte.** Un « 3 » à côté de trois objets
+  dessinés se rate une fois sur deux. Rien ne se compte sur la carte.
+- **Rien de non nommé.** La scène finit par « rien d'autre n'est dessiné », sinon
+  la planche se peuple toute seule.
 - **Aucune surface inscriptible laissée libre.** Plaques, formes et cartouches
   appellent une inscription et le modèle l'invente, en franglais bancal.
 
@@ -71,7 +81,7 @@ guillemets. Une image coûte environ 0,30 $ en `high` à cette taille, et une fa
 de frappe dans une étiquette se repaie en planche entière : l'édition ne sait pas
 corriger une lettre.
 
-## 3. Générer
+## 4. Générer
 
 **Préflight, avant de payer un sous-agent.** Le plugin `erom-image` doit être actif
 dans la session, sinon ses tools MCP n'existent pour personne, sous-agent compris :
@@ -91,17 +101,27 @@ serveurs répondaient `✔ Connected` au CLI, mais le sous-agent ne voyait aucun
 Appel obligatoirement délégué : la skill `erom-image:gpt` interdit d'appeler ses
 tools MCP depuis le contexte principal.
 
-Déléguer à un sous-agent `general-purpose`, en lui donnant le chemin du fichier de
-prompt plutôt que le prompt recopié, et ces paramètres :
+Deux appels, dans cet ordre :
+
+1. **Brouillon en `low`**, environ 0,01 $, `filename` `brouillon`. Il ne prédit pas
+   le tirage, il teste le prompt : regarder la composition seulement. Si elle
+   retombe sur une carte déjà livrée ou sur l'ancien squelette (colonne de blocs,
+   rangée de chiffres, tableau), ou s'il manque une zone de noms, corriger le
+   prompt et refaire un brouillon. Ni le texte ni le trait ne se jugent à ce stade.
+2. **Tirage en `high`**, environ 0,30 $, `filename` `<nom du plugin>`, une fois le
+   brouillon conforme. Même prompt, sans retouche entre les deux.
+
+Déléguer chaque appel à un sous-agent `general-purpose`, en lui donnant le chemin
+du fichier de prompt plutôt que le prompt recopié, et ces paramètres :
 
 | Paramètre | Valeur |
 |---|---|
 | tool | `mcp__plugin_erom-image_gpt__gpt_image_generate` |
 | `size` | `1536x1024` |
-| `quality` | `high` |
+| `quality` | `low` pour le brouillon, `high` pour le tirage |
 | `output_format` | `png` |
 | `output_dir` | `<dépôt>/assets`, en absolu |
-| `filename` | `plugin.png`, overwite ok |
+| `filename` | `brouillon` puis `<nom du plugin>`, overwrite ok |
 
 Consigne à mettre mot pour mot dans le prompt du sous-agent :
 
@@ -110,33 +130,40 @@ Consigne à mettre mot pour mot dans le prompt du sous-agent :
 > paie l'image deux fois.
 
 Le sous-agent ne remonte que le chemin du fichier, jamais le bloc de réponse entier.
+S'il revient sans chemin en disant qu'il attend un watcher sur le dossier (vu le
+29/08/2026 sur un `high` qui a dépassé les 60 s), ne pas attendre avec lui : lister
+`assets/` soi-même, le fichier y est, écrit une vingtaine de secondes après le
+timeout.
 
-## 4. Vérifier avant de montrer
+## 5. Vérifier avant de montrer
 
 ```bash
 mv assets/<nom> assets/<nom>.png        # le fichier sort sans extension
 sips -g pixelWidth -g pixelHeight assets/<nom>.png
+trash assets/brouillon*                  # le brouillon ne se livre pas
 ```
 
 Puis regarder l'image, et vérifier dans cet ordre :
 
 1. **Chaque chaîne de texte**, caractère par caractère, accents compris. Cropper les
-   zones denses : le tableau de la stack et les étiquettes de l'écorché.
+   zones denses : les noms de composants et les cartouches à plusieurs noms.
    `sips -c <h> <l> --cropOffset <y> <x> assets/<nom>.png --out /tmp/crop.png`
-2. **Les noms de composants** correspondent à l'inventaire de l'étape 1.
-3. **Ce qui est dénombrable** : compter les modules dessinés et les comparer aux
-   chiffres affichés.
+2. **Les noms de composants** correspondent à l'inventaire de l'étape 1, et ils y
+   sont tous.
+3. **Ce qui est dénombrable** : compter les objets dessinés là où le prompt en
+   plaçait un nombre précis (à gauche, au centre, à droite).
+4. **La composition** est celle de la note, pas celle d'une carte déjà livrée.
 
 Une faute isolée se corrige par `gpt_image_edit` si c'est un mot entier à remplacer
 ou un élément à ajouter. Une lettre fautive dans un mot se régénère : l'édition
 préserve l'artefact au lieu de le corriger, vérifié le 25/08 sur `SQLïte` qui a
 survécu à deux passes ciblées.
 
-## 5. Livrer
+## 6. Livrer
 
 Annoncer le chemin, les dimensions, et ce qui a été vérifié au crop. Si un défaut
 subsiste et qu'il ne vaut pas une régénération, le dire plutôt que le laisser
-découvrir.
+découvrir. Ajouter la carte à la table des cartes livrées du gabarit.
 
 La ligne à ajouter au README du dépôt :
 
@@ -148,10 +175,11 @@ La ligne à ajouter au README du dépôt :
 
 - **Le style ne se rediscute pas.** Il a été choisi contre une version au DS
   institut, explicitement rejetée. Ne propose pas de variante de style, propose des
-  variantes d'écorché.
-- **Rien ne s'invente sur la carte.** Chaque nom, chaque chiffre se retrace à la
-  sortie de `claude plugin details` ou à un `SKILL.md`. Une carte qui affiche un
-  composant non chargé ment à qui installe le plugin, et c'est la seule faute qui ne
-  se voit pas à l'œil.
-- **Une génération par validation.** Ne pas enchaîner deux tirages pour comparer
-  sans que Romain l'ait demandé : à ce format et en `high`, chaque essai se paie.
+  variantes de scène.
+- **Rien ne s'invente sur la carte.** Chaque nom se retrace à la sortie de
+  `claude plugin details` ou à un `SKILL.md`. Une carte qui affiche un composant
+  non chargé ment à qui installe le plugin, et c'est la seule faute qui ne se voit
+  pas à l'œil.
+- **Un tirage en `high` par validation.** Ne pas enchaîner deux tirages pour
+  comparer sans que Romain l'ait demandé : à ce format et en `high`, chaque essai
+  se paie. Le brouillon en `low` ne compte pas, il coûte un centime.

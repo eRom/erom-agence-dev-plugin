@@ -157,6 +157,8 @@ livré.
 | `erom-memory` | séquence | six stations en enfilade, une pièce qui avance | 25/08/2026 |
 | `trinity` | écorché | bloc moteur, capot ouvert, six tubulures en éventail | 25/08/2026 |
 | `harnais-erom` | coupe | bâtiment à trois niveaux | 25/08/2026 |
+| `erom-seo` 0.1 | plan | atelier de cartographie en plongée, quatre postes en boucle autour d'une carte, lunette à l'écart | 30/08/2026 |
+| `erom-vision` 0.1 | plan | poste de contrôle qualité en plongée, marbre, épreuves étiquetées par état, calibres passe / ne passe pas, tampon PASS FAIL | 05/09/2026 |
 
 Le mauvais réflexe : dessiner un ordinateur, un écran, un terminal. Ça ne montre
 rien et ça ressemble à toutes les autres cartes.

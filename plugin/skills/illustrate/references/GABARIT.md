@@ -160,6 +160,7 @@ livré.
 | `erom-seo` 0.1 | plan | atelier de cartographie en plongée, quatre postes en boucle autour d'une carte, lunette à l'écart | 30/08/2026 |
 | `erom-dev-ios-apps` 0.1 | mur d'outils | panneau perforé d'horloger, trois rangées d'outils fins nommés, étau sur l'établi serrant un mouvement de montre ouvert, smartphone sur support à côté (ajouté par édition, écran noir, sans logo) | 12/09/2026 |
 | `erom-vision` 0.1 | plan | poste de contrôle qualité en plongée, marbre, épreuves étiquetées par état, calibres passe / ne passe pas, tampon PASS FAIL | 05/09/2026 |
+| `erom-dev-macos-apps` 0.1 | écorché | fenêtre d'app macOS en écorché sur l'écran d'un portable ouvert, ses parties nommées par lignes de rappel ; à gauche un boîtier compact avec stéthoscope et pied à coulisse, à droite un mini-boîtier à moitié emballé de kraft avec une plume (libellé « LIVERR » remplacé par édition, mot entier) | 12/09/2026 |
 
 Le mauvais réflexe : dessiner un ordinateur, un écran, un terminal. Ça ne montre
 rien et ça ressemble à toutes les autres cartes.

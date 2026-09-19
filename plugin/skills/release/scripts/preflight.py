@@ -12,11 +12,18 @@ Codes de sortie :
     0  cohérent
     1  divergence de version, ou manifeste invalide
     2  le plugin est absent de la marketplace (première publication)
+    3  versions alignées, mais une description cite un chemin ~/ qui n'existe pas
 """
 
 import json
+import re
 import sys
 from pathlib import Path
+
+# Un chemin sous le home cité dans une description d'entrée.
+HOME_PATH = re.compile(r"~/[\w./*<>{}-]+")
+# Début de la partie gabarit d'un chemin : on ne vérifie que le préfixe fixe.
+TEMPLATE_START = re.compile(r"[<{*]|YYYY")
 
 
 def charger(chemin: Path) -> dict:
@@ -44,6 +51,24 @@ def valider_marketplace(market: dict, chemin: Path) -> None:
         sys.exit(f"❌ {chemin.name} : noms en double : {doublons}")
 
 
+def dead_home_paths(market: dict) -> list[tuple[str, str]]:
+    """Chemins ~/ cités dans les descriptions de TOUTES les entrées et absents du disque.
+
+    Toutes les entrées, pas seulement celle en release : l'incident du 2026-08-23 a
+    corrigé erom-insight et laissé erom-research citer un dossier renommé pendant
+    17 releases (erom-plugin-artefacts -> erom-store, mort depuis le 2026-08-20).
+    """
+    dead = []
+    for entry in market["plugins"]:
+        for token in HOME_PATH.findall(entry.get("description", "")):
+            fixed = TEMPLATE_START.split(token, maxsplit=1)[0].rstrip(".")
+            if fixed in ("~", "~/"):
+                continue
+            if not (Path.home() / fixed[2:]).exists():
+                dead.append((entry["name"], token.rstrip(".")))
+    return dead
+
+
 def main() -> int:
     if len(sys.argv) != 3:
         sys.exit(__doc__)
@@ -61,6 +86,10 @@ def main() -> int:
     print(f"plugin        {nom} {version_locale}   ({chemin_plugin})")
     print(f"marketplace   {len(market['plugins'])} plugins, "
           f"metadata {market.get('metadata', {}).get('version', '?')}")
+
+    dead = dead_home_paths(market)
+    for plugin_name, path in dead:
+        print(f"❌ chemin mort dans la description de {plugin_name} : {path}")
 
     entree = next((p for p in market["plugins"] if p["name"] == nom), None)
     if entree is None:
@@ -84,6 +113,10 @@ def main() -> int:
         print(f"\n❌ divergence : plugin {version_locale} ≠ marketplace {version_market}")
         print("   Normal entre les deux commits d'une release, fautif ailleurs.")
         return 1
+
+    if dead:
+        print(f"\n❌ versions alignées sur {version_locale}, mais {len(dead)} chemin(s) mort(s) ci-dessus")
+        return 3
 
     print(f"\n✅ versions alignées sur {version_locale}")
     return 0

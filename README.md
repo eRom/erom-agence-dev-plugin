@@ -60,6 +60,8 @@ installer autre chose que ce qui est déclaré.
 Un préflight compare la version des deux côtés et rejoue les assertions de la CI
 avant chaque push. Il refuse de valider tant que les versions divergent, ce qui
 est précisément l'erreur silencieuse qu'il existe pour attraper.
+Il relit aussi les descriptions de toutes les entrées de la marketplace et
+signale tout chemin `~/` qui n'existe plus sur le disque.
 
 Sur une première publication, la skill s'arrête et demande : l'entrée à créer
 réclame une description, une source et un choix de `strict`.

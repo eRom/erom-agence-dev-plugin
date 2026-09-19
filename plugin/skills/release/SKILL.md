@@ -42,7 +42,7 @@ git status --short
 ```
 
 Le préflight dit le nom du plugin, sa version des deux côtés, et s'il est absent de la
-marketplace. Trois situations méritent un arrêt et une question à Romain plutôt qu'une
+marketplace. Quatre situations méritent un arrêt et une question à Romain plutôt qu'une
 initiative :
 
 - **Le plugin n'est pas dans la marketplace.** C'est une première publication, pas un
@@ -53,6 +53,11 @@ initiative :
   pas dans le commit de release : un `.gitignore` ou un fichier de config qui traînait
   brouille le diff et complique un futur `revert`. Stage les fichiers du chantier
   nommément, signale les autres dans le récapitulatif, et laisse Romain trancher.
+- **Le préflight sort en code 3 : une description cite un chemin `~/` mort.** Il lit
+  les descriptions de toutes les entrées, pas seulement celle du plugin en release.
+  Corrige l'entrée nommée, même si c'est celle d'un plugin voisin : c'est justement
+  celle que personne ne relit (erom-research a cité un dossier renommé pendant 17
+  releases, du 2026-08-20 au 2026-09-19).
 
 ---
 

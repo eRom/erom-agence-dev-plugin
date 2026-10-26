@@ -2,7 +2,6 @@
 name: release
 description: "Publie une nouvelle version d'un plugin Claude Code eRom : bump du manifeste et du README du plugin, commit et push de son repo, puis mise à jour de erom-marketplace (entrée du plugin, metadata, tableau du README), commit, push et vérification de la CI. Commande explicite, lancée au slash : /erom-dev-plugin:release."
 user-invocable: true
-disable-model-invocation: true
 ---
 
 # Plugin release

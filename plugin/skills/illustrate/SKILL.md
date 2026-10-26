@@ -1,6 +1,6 @@
 ---
 name: illustrate
-description: "Dessine la carte de présentation d'un plugin Claude Code eRom : une planche au fusain en 1536x1024, générée par GPT Image, dont tout le contenu vient de l'inventaire réel du plugin (skills, agents, hooks, serveurs MCP) et dont la composition se dérive de ce que le plugin résout. Sort dans assets/, destinée au README GitHub. Commande explicite, lancée au slash : /erom-dev-plugin:illustrate."
+description: "Dessine la carte de présentation d'un plugin Claude Code eRom : une planche au fusain en 1536x1024, générée par GPT Image, dont tout le contenu vient de l'inventaire réel du plugin (skills, agents, hooks, serveurs MCP) et dont la composition se dérive de ce que le plugin résout. Sort dans assets/, destinée au README GitHub."
 user-invocable: true
 ---
 
